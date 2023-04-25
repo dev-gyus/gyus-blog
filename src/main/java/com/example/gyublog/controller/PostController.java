@@ -1,5 +1,6 @@
 package com.example.gyublog.controller;
 
+import com.example.gyublog.domain.Post;
 import com.example.gyublog.request.PostCreate;
 import com.example.gyublog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,12 @@ public class PostController {
     private final PostService postService;
     // Http Methods = GET, POST, DELETE, PUT, PATCH, OPTIONS, CONNECT, HEAD
     @PostMapping("/posts")
-    public Map<String, String> post(@Valid @RequestBody PostCreate request) {
+    public void post(@Valid @RequestBody PostCreate request) {
         postService.write(request);
-        return Map.of();
+    }
+
+    @GetMapping("/posts/{postId}")
+    public Post get(@PathVariable Long postId){
+        return postService.get(postId);
     }
 }

@@ -1,9 +1,6 @@
 package com.example.gyublog.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -11,7 +8,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
     @Id
@@ -21,4 +17,10 @@ public class Post {
     @Lob
     @Basic(fetch = FetchType.LAZY)
     private String content;
+
+    @Builder
+    public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
