@@ -105,7 +105,7 @@ class PostControllerAdviceTest {
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(print());
-        // then
+        // then;;;
         Assertions.assertThat(postRepository.count()).isEqualTo(1L);
         List<Post> postList = postRepository.findAll();
         Assertions.assertThat(postList.size()).isEqualTo(1L);
