@@ -112,7 +112,7 @@ class PostControllerAdviceTest {
         Assertions.assertThat(postList.get(0).getTitle()).isEqualTo(title);
         Assertions.assertThat(postList.get(0).getContent()).isEqualTo(content);
     }
-
+//;;;
     @Test
     @DisplayName("글 한 개 조회")
     void test4() throws Exception {
