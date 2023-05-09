@@ -116,7 +116,7 @@ class PostControllerAdviceTest {
     @Test
     @DisplayName("글 한 개 조회")
     void test4() throws Exception {
-        // given;;
+        // given
         Post post = Post.builder()
                 .title("foo")
                 .content("bar")
