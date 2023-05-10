@@ -24,7 +24,7 @@ public class PostCreate {
     public Post toDao() {
         return Post.builder()
                 .title(this.title)
-                .content(this.title)
+                .content(this.content)
                 .build();
     }
 

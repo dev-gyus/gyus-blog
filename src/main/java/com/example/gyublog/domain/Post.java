@@ -1,8 +1,9 @@
 package com.example.gyublog.domain;
 
-import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -23,4 +24,6 @@ public class Post {
         this.title = title;
         this.content = content;
     }
+
+    // 엔티티에 서비스 정책관련 로직을 넣지 말것!!!!! 필수!!!
 }

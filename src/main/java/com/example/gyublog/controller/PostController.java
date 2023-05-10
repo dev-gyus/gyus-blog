@@ -1,20 +1,15 @@
 package com.example.gyublog.controller;
 
-import com.example.gyublog.domain.Post;
 import com.example.gyublog.request.PostCreate;
+import com.example.gyublog.response.PostResponse;
 import com.example.gyublog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -27,8 +22,19 @@ public class PostController {
         postService.write(request);
     }
 
+    // 글 단건 조회
     @GetMapping("/posts/{postId}")
-    public Post get(@PathVariable Long postId){
+    public PostResponse getPost(@PathVariable Long postId) {
+        // Request 클래스
+        // Response 클래스 분리
         return postService.get(postId);
+    }
+
+    // 글 목록 조회
+    @GetMapping("/posts")
+    public List<PostResponse> getPosts(Pageable pageable) {
+        // Request 클래스
+        // Response 클래스 분리
+        return postService.getPosts(pageable);
     }
 }
