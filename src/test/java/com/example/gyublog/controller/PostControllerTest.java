@@ -173,7 +173,6 @@ class PostControllerTest {
                 .andExpect(jsonPath("$[1].title", Matchers.is(post2.getTitle())))
                 .andExpect(jsonPath("$[1].content", Matchers.is(post2.getContent())))
                 .andDo(print());
-        //;;;
     }
 
 }
