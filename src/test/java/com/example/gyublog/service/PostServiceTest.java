@@ -4,16 +4,18 @@ import com.example.gyublog.domain.Post;
 import com.example.gyublog.repository.PostRepository;
 import com.example.gyublog.request.PostCreate;
 import com.example.gyublog.response.PostResponse;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @Transactional
@@ -42,10 +44,10 @@ class PostServiceTest {
         // when
         postService.write(postCreate);
         // then
-        Assertions.assertThat(postRepository.count()).isEqualTo(1L);
+        assertThat(postRepository.count()).isEqualTo(1L);
         Post post = postRepository.findAll().get(0);
-        Assertions.assertThat(post.getTitle()).isEqualTo(title);
-        Assertions.assertThat(post.getContent()).isEqualTo(content);
+        assertThat(post.getTitle()).isEqualTo(title);
+        assertThat(post.getContent()).isEqualTo(content);
     }
 
     @Test
@@ -61,28 +63,30 @@ class PostServiceTest {
         // when
         PostResponse post = postService.get(savedPost.getId());
         // then
-        Assertions.assertThat(post).isNotNull();
-        Assertions.assertThat(post.getTitle()).isEqualTo(savedPost.getTitle());
-        Assertions.assertThat(post.getContent()).isEqualTo(savedPost.getContent());
+        assertThat(post).isNotNull();
+        assertThat(post.getTitle()).isEqualTo(savedPost.getTitle());
+        assertThat(post.getContent()).isEqualTo(savedPost.getContent());
     }
 
     @Test
-    @DisplayName("글 여러 개 조회")
+    @DisplayName("글 1 페이지 조회")
     void test3() {
         // given
-        Post post = Post.builder()
-                .title("123456789012345")
-                .content("bar")
-                .build();
-        Post post2 = Post.builder()
-                .title("1234567890")
-                .content("bar")
-                .build();
-        postRepository.saveAll(List.of(post, post2));
+        // 글 30개 생성
+        List<Post> requestPosts = IntStream.range(0, 30).mapToObj(idx ->
+            Post.builder()
+                    .title("규스 제목 - " + idx)
+                    .content("규스 내용 - " + idx)
+                    .build()
+        ).collect(Collectors.toList());
+        // 글 30개 저장
+        postRepository.saveAll(requestPosts);
         // when
-        List<PostResponse> posts = postService.getPosts(PageRequest.of(0, 10));
+        List<PostResponse> posts = postService.getPosts(1, 10);
         // then
-        Assertions.assertThat(posts.size()).isEqualTo(2);
+        assertThat(posts.size()).isEqualTo(10);
+        assertThat(posts.get(0).getTitle()).isEqualTo("규스 제목 - 19");
+        assertThat(posts.get(9).getTitle()).isEqualTo("규스 제목 - 10");
     }
 
 }

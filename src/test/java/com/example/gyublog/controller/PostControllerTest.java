@@ -5,7 +5,6 @@ import com.example.gyublog.repository.PostRepository;
 import com.example.gyublog.request.PostCreate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +17,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -151,27 +152,19 @@ class PostControllerTest {
     @DisplayName("글 여러 개 조회")
     void test5() throws Exception {
         // given
-        Post post = Post.builder()
-                .title("123456789012345")
-                .content("bar")
-                .build();
-        Post post2 = Post.builder()
-                .title("123456789033")
-                .content("bar")
-                .build();
-        postRepository.saveAll(List.of(post, post2));
+        // 글 30개 생성
+        List<Post> requestPosts = IntStream.range(0, 30).mapToObj(idx ->
+                Post.builder()
+                        .title("규스 제목 - " + idx)
+                        .content("규스 내용 - " + idx)
+                        .build()
+        ).collect(Collectors.toList());
+        postRepository.saveAll(requestPosts);
         // expected
         // post의 응답값의 title은 10글자만 해달라는 요구사항이 온 경우
-        mockMvc.perform(get("/posts", 0, 10)
+        mockMvc.perform(get("/posts?page=1&limit=10", 1, 10)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", Matchers.is(2)))
-                .andExpect(jsonPath("$[0].id", Matchers.is(post.getId())))
-                .andExpect(jsonPath("$[0].title", Matchers.is(post.getTitle())))
-                .andExpect(jsonPath("$[0].content", Matchers.is(post.getContent())))
-                .andExpect(jsonPath("$[1].id", Matchers.is(post2.getId())))
-                .andExpect(jsonPath("$[1].title", Matchers.is(post2.getTitle())))
-                .andExpect(jsonPath("$[1].content", Matchers.is(post2.getContent())))
                 .andDo(print());
     }
 

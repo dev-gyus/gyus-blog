@@ -33,8 +33,9 @@ public class PostController {
     // 글 목록 조회
     @GetMapping("/posts")
     public List<PostResponse> getPosts(Pageable pageable) {
+        log.info("page={} / size={}", pageable.getPageNumber(), pageable.getPageSize());
         // Request 클래스
         // Response 클래스 분리
-        return postService.getPosts(pageable);
+        return postService.getPosts(pageable.getPageNumber(), pageable.getPageSize());
     }
 }

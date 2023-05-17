@@ -6,11 +6,14 @@ import com.example.gyublog.request.PostCreate;
 import com.example.gyublog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 
 @Slf4j
@@ -41,12 +44,13 @@ public class PostService {
 
     /**
      * 게시글 목록 페이징 조회
-     * @param pageable  페이징 객체
+     * @param page  페이지 번호
+     * @param limit 페이징 개수
      * @return          응답 목록
      */
-    public List<PostResponse> getPosts(Pageable pageable) {
-        List<Post> postList = postRepository.findAll(pageable).getContent();
-        return postList.stream()
+    public List<PostResponse> getPosts(int page, int limit) {
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by(DESC, "id"));
+        return postRepository.findAll(pageRequest).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
     }
