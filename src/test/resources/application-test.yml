@@ -8,8 +8,6 @@ spring:
       pageable:
         one-indexed-parameters: true
     mongodb:
-      uri: mongodb+srv://gyus:vmffkd495@cluster-prod.7ay2n.mongodb.net/?retryWrites=true&w=majority
-      database: gyublog
 
 
 #  datasource:
