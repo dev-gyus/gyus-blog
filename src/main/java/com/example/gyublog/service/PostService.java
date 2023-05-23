@@ -2,6 +2,7 @@ package com.example.gyublog.service;
 
 import com.example.gyublog.domain.Post;
 import com.example.gyublog.repository.PostRepository;
+import com.example.gyublog.repository.PostTempleRepository;
 import com.example.gyublog.request.PostCreate;
 import com.example.gyublog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +23,11 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final PostTempleRepository postTempleRepository;
+    @Transactional
     public void write(PostCreate postCreate) {
-        postRepository.save(postCreate.toDao());
+//        postRepository.save(postCreate.toDao());
+        postTempleRepository.update();
     }
 
     /**

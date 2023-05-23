@@ -7,9 +7,11 @@ spring:
     web:
       pageable:
         one-indexed-parameters: false
-
-  datasource:
-    url: jdbc:h2:mem:gyublog
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    mongodb:
+      uri: mongodb+srv://gyus:vmffkd495@cluster-prod.7ay2n.mongodb.net/gyublog?retryWrites=true&w=majority
+      database: gyublog
+#  datasource:
+#    url: jdbc:h2:mem:gyublog
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver

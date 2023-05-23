@@ -1,22 +1,21 @@
 package com.example.gyublog.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-
-@Entity
+//@Entity
+@Document
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id = 1L;
     private String title;
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
+//    @Lob
+//    @Basic(fetch = FetchType.LAZY)
     private String content;
 
     @Builder
