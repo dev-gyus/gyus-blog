@@ -5,10 +5,8 @@ import com.example.gyublog.repository.EmbeddedPostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mapping.callback.EntityCallback;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class PostSaveEventListener implements EntityCallback<Post> {
     private final EmbeddedPostRepository embeddedPostRepository;

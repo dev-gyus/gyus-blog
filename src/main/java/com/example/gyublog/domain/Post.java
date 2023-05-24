@@ -2,7 +2,12 @@ package com.example.gyublog.domain;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //@Entity
 @Document
@@ -17,6 +22,9 @@ public class Post {
 //    @Lob
 //    @Basic(fetch = FetchType.LAZY)
     private String content;
+    @DocumentReference
+    @ReadOnlyProperty
+    List<EmbeddedPost> embeddedPostList = new ArrayList<>();
 
     @Builder
     public Post(String title, String content) {

@@ -65,6 +65,7 @@ class PostControllerTest {
         // then
 //        Assertions.assertThat(postRepository.count()).isEqualTo(1L);
         List<Post> postList = postRepository.findAll();
+        System.out.println(postList);
 //        Assertions.assertThat(postList.size()).isEqualTo(1L);
 //        Assertions.assertThat(postList.get(0).getTitle()).isEqualTo(title);
 //        Assertions.assertThat(postList.get(0).getContent()).isEqualTo(content);

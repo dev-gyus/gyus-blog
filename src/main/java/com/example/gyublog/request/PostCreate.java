@@ -1,5 +1,6 @@
 package com.example.gyublog.request;
 
+import com.example.gyublog.domain.EmbeddedPost;
 import com.example.gyublog.domain.Post;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,10 +23,13 @@ public class PostCreate {
     }
 
     public Post toDao() {
-        return Post.builder()
+        Post post = Post.builder()
                 .title(this.title)
                 .content(this.content)
                 .build();
+        EmbeddedPost embeddedPost = EmbeddedPost.builder().postId(post.getId()).postTitle(post.getTitle()).postContent(post.getContent()).build();
+        post.getEmbeddedPostList().add(embeddedPost);
+        return post;
     }
 
     // 빌더의 장점

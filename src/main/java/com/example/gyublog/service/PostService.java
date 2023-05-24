@@ -26,8 +26,10 @@ public class PostService {
     private final PostTempleRepository postTempleRepository;
     @Transactional
     public void write(PostCreate postCreate) {
-//        postRepository.save(postCreate.toDao());
-        postTempleRepository.update();
+        Post post = postCreate.toDao();
+        log.info("post = {}", post);
+        postRepository.save(post);
+//        postTempleRepository.update();
     }
 
     /**
@@ -39,6 +41,7 @@ public class PostService {
         // find entity
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+        log.info("post = {}", post);
         // response build
         return PostResponse.builder()
                 .id(post.getId())
