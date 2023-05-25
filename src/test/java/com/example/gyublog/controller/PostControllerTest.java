@@ -137,7 +137,7 @@ class PostControllerTest {
                 .content("bar")
                 .build();
         postRepository.save(post);
-        // expected
+        // expectedasdf
         // post의 응답값의 title은 10글자만 해달라는 요구사항이 온 경우
         mockMvc.perform(get("/posts/{postsId}", post.getId())
                         .contentType(MediaType.APPLICATION_JSON)
