@@ -38,4 +38,9 @@ public class PostController {
         // Response 클래스 분리
         return postService.getPosts(pageable.getPageNumber(), pageable.getPageSize());
     }
+
+    @PutMapping("/post/{postId}")
+    public void updatePost(@PathVariable Long postId) {
+        postService.updatePost(postId);
+    }
 }

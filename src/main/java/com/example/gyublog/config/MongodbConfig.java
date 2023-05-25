@@ -1,5 +1,6 @@
 package com.example.gyublog.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.transaction.PlatformTransactionManager;
 
+@Slf4j
 @Configuration
 public class MongodbConfig extends AbstractMongoClientConfiguration {
     @Value("${spring.data.mongodb.database}")

@@ -63,6 +63,10 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    public void updatePost(Long postId) {
+        postTempleRepository.update();
+    }
+
     /**
      * Architecture Layer
      * PostController -> WebPostService (클라이언트 응답을 목적으로 두는 서비스) -> Repository

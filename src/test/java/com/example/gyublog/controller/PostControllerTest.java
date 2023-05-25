@@ -19,8 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -167,5 +166,25 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("글 하나 수정")
+    void test6() throws Exception {
+        // given
+        // 글 30개 생성
+        Post post = Post.builder()
+                .title("규스 제목 - ")
+                .content("규스 내용 - ")
+                .build();
+        Post savedPost = postRepository.save(post);
+        // expected
+        // post의 응답값의 title은 10글자만 해달라는 요구사항이 온 경우
+        mockMvc.perform(put("/post/" + savedPost.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+
 
 }
