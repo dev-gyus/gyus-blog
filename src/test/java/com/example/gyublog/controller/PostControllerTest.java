@@ -176,6 +176,7 @@ class PostControllerTest {
                 .title("규스 제목 - ")
                 .content("규스 내용 - ")
                 .build();
+        //;;
         Post savedPost = postRepository.save(post);
         // expected
         // post의 응답값의 title은 10글자만 해달라는 요구사항이 온 경우
