@@ -1,30 +1,23 @@
 package com.example.gyublog.domain;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.ReadOnlyProperty;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
+import java.util.Objects;
 
-//@Entity
-@Document
+@Entity
 @Getter
 @ToString
+@Table(name = "post")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = 1L;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
-//    @Lob
-//    @Basic(fetch = FetchType.LAZY)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     private String content;
-    @DocumentReference
-    @ReadOnlyProperty
-    List<EmbeddedPost> embeddedPostList = new ArrayList<>();
 
     @Builder
     public Post(String title, String content) {
@@ -32,5 +25,8 @@ public class Post {
         this.content = content;
     }
 
-    // 엔티티에 서비스 정책관련 로직을 넣지 말것!!!!! 필수!!!
+    public void edit(PostEditor postEditor) {
+        this.title = Objects.isNull(postEditor.getTitle()) ? this.title : postEditor.getTitle();
+        this.content = Objects.isNull(postEditor.getContent()) ? this.content : postEditor.getContent();
+    }
 }

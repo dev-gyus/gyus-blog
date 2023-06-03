@@ -3,6 +3,7 @@ package com.example.gyublog.controller;
 import com.example.gyublog.domain.Post;
 import com.example.gyublog.repository.PostRepository;
 import com.example.gyublog.request.PostCreate;
+import com.example.gyublog.request.PostEdit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -161,7 +162,7 @@ class PostControllerTest {
         postRepository.saveAll(requestPosts);
         // expected
         // post의 응답값의 title은 10글자만 해달라는 요구사항이 온 경우
-        mockMvc.perform(get("/posts?page=1&limit=10", 1, 10)
+        mockMvc.perform(get("/posts?page=1&size=10", 1, 10)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -186,6 +187,74 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("페이지를 1 미만으로 요청할 경우 첫 페이지를 조회한다")
+    void test7() throws Exception {
+        // given
+        // 글 30개 생성
+        List<Post> requestPosts = IntStream.range(0, 30).mapToObj(idx ->
+                Post.builder()
+                        .title("규스 제목 - " + idx)
+                        .content("규스 내용 - " + idx)
+                        .build()
+        ).collect(Collectors.toList());
+        postRepository.saveAll(requestPosts);
+        // expected
+        // post의 응답값의 title은 10글자만 해달라는 요구사항이 온 경우
+        mockMvc.perform(get("/posts?page=0&size=10")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test8() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("규스 제목 - ")
+                .content("규스 내용 - ")
+                .build();
+        Post savedPost = postRepository.save(post);
+        PostEdit postEdit = PostEdit.builder()
+                .title("수정된 제목")
+                .build();
+        // expected
+        // post의 응답값의 title은 10글자만 해달라는 요구사항이 온 경우
+        mockMvc.perform(put("/posts/{postId}", savedPost.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit)))
+                .andExpect(status().isOk())
+                .andDo(print());
+        // then
+        mockMvc.perform(get("/posts/{postsId}", savedPost.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(postEdit.getTitle()))
+                .andExpect(jsonPath("$.content").value(savedPost.getContent()))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 하나 삭제")
+    void test9() throws Exception {
+        // given
+        Post post = Post.builder()
+                .title("규스 제목 - ")
+                .content("규스 내용 - ")
+                .build();
+        Post savedPost = postRepository.save(post);
+        // when
+        mockMvc.perform(delete("/posts/{postId}", savedPost.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+        // then
+        mockMvc.perform(get("/posts/{postsId}", savedPost.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andDo(print());
+    }
 
 
 }

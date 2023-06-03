@@ -1,11 +1,13 @@
 package com.example.gyublog.controller;
 
 import com.example.gyublog.request.PostCreate;
+import com.example.gyublog.request.PostEdit;
+import com.example.gyublog.request.PostSearch;
 import com.example.gyublog.response.PostResponse;
 import com.example.gyublog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,15 +34,25 @@ public class PostController {
 
     // 글 목록 조회
     @GetMapping("/posts")
-    public List<PostResponse> getPosts(Pageable pageable) {
-        log.info("page={} / size={}", pageable.getPageNumber(), pageable.getPageSize());
+    public List<PostResponse> getPosts(@ModelAttribute PostSearch postSearch) {
         // Request 클래스
         // Response 클래스 분리
-        return postService.getPosts(pageable.getPageNumber(), pageable.getPageSize());
+        return postService.getPosts(postSearch);
     }
 
-    @PutMapping("/post/{postId}")
-    public void updatePost(@PathVariable Long postId) {
-        postService.updatePost(postId);
+    @PutMapping("/posts/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updatePost(@PathVariable Long postId, @RequestBody PostEdit postEdit) {
+        // Request 클래스
+        // Response 클래스 분리
+        postService.edit(postId, postEdit);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePost(@PathVariable Long postId) {
+        // Request 클래스
+        // Response 클래스 분리
+        postService.delete(postId);
     }
 }

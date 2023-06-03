@@ -21,7 +21,7 @@ public class PostResponse {
     @Builder
     public PostResponse(Long id, String title, String content) {
         this.id = id;
-        this.title = title.length() < 10 ? title : title.substring(0, 10);
+        this.title = title;
         this.content = content;
     }
 }

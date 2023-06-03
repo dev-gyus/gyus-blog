@@ -3,7 +3,10 @@ package com.example.gyublog.service;
 import com.example.gyublog.domain.Post;
 import com.example.gyublog.repository.PostRepository;
 import com.example.gyublog.request.PostCreate;
+import com.example.gyublog.request.PostEdit;
+import com.example.gyublog.request.PostSearch;
 import com.example.gyublog.response.PostResponse;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @Transactional
@@ -82,11 +86,77 @@ class PostServiceTest {
         // 글 30개 저장
         postRepository.saveAll(requestPosts);
         // when
-        List<PostResponse> posts = postService.getPosts(1, 10);
+        List<PostResponse> posts = postService.getPosts(
+                PostSearch.builder()
+                        .page(1)
+                        .size(10)
+                        .build()
+        );
         // then
         assertThat(posts.size()).isEqualTo(10);
-        assertThat(posts.get(0).getTitle()).isEqualTo("규스 제목 - 19");
-        assertThat(posts.get(9).getTitle()).isEqualTo("규스 제목 - 10");
+        assertThat(posts.get(0).getTitle()).isEqualTo("규스 제목 - 0");
+        assertThat(posts.get(9).getTitle()).isEqualTo("규스 제목 - 9");
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test4() {
+        // given
+        Post post = Post.builder()
+                .title("규스")
+                .content("코딩잘하고싶다")
+                .build();
+        // 글 30개 저장
+        Post savedPost = postRepository.save(post);
+        // when
+        PostEdit postEdit = PostEdit.builder()
+                .title("수정된 제목")
+                .content("반포자이")
+                .build();
+        postService.edit(savedPost.getId(), postEdit);
+        // then
+        PostResponse updatePostResponse = postService.get(savedPost.getId());
+        assertThat(updatePostResponse).isNotNull();
+        assertEquals(updatePostResponse.getTitle(), postEdit.getTitle());
+        assertEquals(updatePostResponse.getContent(), postEdit.getContent());
+    }
+
+    @Test
+    @DisplayName("글 내용 수정")
+    void test5() {
+        // given
+        Post post = Post.builder()
+                .title("규스")
+                .content("코딩잘하고싶다")
+                .build();
+        // 글 30개 저장
+        Post savedPost = postRepository.save(post);
+        // when
+        PostEdit postEdit = PostEdit.builder()
+                .content("반포자이")
+                .build();
+        postService.edit(savedPost.getId(), postEdit);
+        // then
+        PostResponse updatePostResponse = postService.get(savedPost.getId());
+        assertThat(updatePostResponse).isNotNull();
+        assertEquals(updatePostResponse.getTitle(), postEdit.getTitle());
+        assertEquals(updatePostResponse.getContent(), postEdit.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test6() {
+        // given
+        Post post = Post.builder()
+                .title("규스")
+                .content("코딩잘하고싶다")
+                .build();
+        // 글 30개 저장
+        Post savedPost = postRepository.save(post);
+        // when
+        postService.delete(savedPost.getId());
+        // then
+        Assertions.assertThatThrownBy(() -> postService.get(savedPost.getId())).isInstanceOf(IllegalArgumentException.class);
     }
 
 }
